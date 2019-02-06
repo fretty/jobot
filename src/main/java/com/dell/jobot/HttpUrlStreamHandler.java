@@ -47,7 +47,6 @@ implements RawUrlStreamHandler {
 				.map(UrlUtil::convertToUrlWithoutAnchorAndQuery)
 				.filter(Optional::isPresent)
 				.map(Optional::get)
-				.filter(url -> url.getProtocol().startsWith("http"))
 				.filter(urlFilter)
 				.map(url -> new HttpUrlProcessingTask(this, url))
 				.peek(executor::submit)
