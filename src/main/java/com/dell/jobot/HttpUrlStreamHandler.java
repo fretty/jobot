@@ -1,7 +1,6 @@
 package com.dell.jobot;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 import java.io.File;
@@ -10,8 +9,9 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class HttpUrlStreamHandler
@@ -21,9 +21,11 @@ implements RawUrlStreamHandler {
 	public static final String LINKS_FILE_NAME = "links.txt";
 
 	private final ExecutorService executor;
+	private final Predicate<URL> urlFilter;
 
-	public HttpUrlStreamHandler(final ExecutorService executor) {
+	public HttpUrlStreamHandler(final ExecutorService executor, final Predicate<URL> urlFilter) {
 		this.executor = executor;
+		this.urlFilter = urlFilter;
 	}
 
 	@Override
@@ -43,8 +45,10 @@ implements RawUrlStreamHandler {
 		) {
 			inStream
 				.map(UrlUtil::convertToUrlWithoutAnchorAndQuery)
-				.filter(Objects::nonNull)
-				.filter(UrlUtil::isHttp)
+				.filter(Optional::isPresent)
+				.map(Optional::get)
+				.filter(url -> url.getProtocol().startsWith("http"))
+				.filter(urlFilter)
 				.map(url -> new HttpUrlProcessingTask(this, url))
 				.peek(executor::submit)
 				.map(HttpUrlProcessingTask::getUrl)

@@ -76,6 +76,7 @@ implements Runnable {
 	}
 
 	void handleResponseContent(final HttpURLConnection conn) {
+		System.out.println("Downloading " + url + " ...");
 		try(val contentReader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
 			String line;
 			val linkBuff = new HashSet<String>();

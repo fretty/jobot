@@ -1,8 +1,8 @@
 # Jobot
 
-A useless internet crawler which extracts the hyperlinks from the web pages. Jobot also saves the metadata for each
-processed URL into the file `<USER_HOME>/.jobot/<URL>/links.txt`. The saved metadata is a list of the URLs extracted
-from the corresponding HTML page.
+A useless, quick and dirty internet crawler which extracts the hyperlinks from the web pages. Jobot also saves the
+metadata for each processed URL into the file `<USER_HOME>/.jobot/<URL>/links.txt`. The saved metadata is a list of the
+URLs extracted from the corresponding HTML page.
 
 # Build
 

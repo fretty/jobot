@@ -4,10 +4,12 @@ import lombok.NonNull;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 public interface UrlUtil {
 
-	static URL convertToUrlWithoutAnchorAndQuery(final @NonNull String raw) {
+	static Optional<URL> convertToUrlWithoutAnchorAndQuery(final @NonNull String raw) {
 		String t = raw;
 		if(t.contains("#")) {
 			t = t.substring(0, t.indexOf("#"));
@@ -16,16 +18,14 @@ public interface UrlUtil {
 			t = t.substring(0, t.indexOf("?"));
 		}
 		try {
-			return new URL(t);
+			return Optional.of(new URL(t));
 		} catch(final MalformedURLException e) {
 			System.err.println("Failed to convert \"" + raw + "\" to URL");
-			return null;
+			return Optional.empty();
 		} catch(final Exception e) {
 			throw new AssertionError("Unexpected failure while converting \"" + raw + "\" to URL", e);
 		}
 	}
 
-	static boolean isHttp(final @NonNull URL url) {
-		return url.getProtocol().startsWith("http");
-	}
+	Predicate<URL> HTTP_FILTER = url -> url.getProtocol().startsWith("http");
 }
