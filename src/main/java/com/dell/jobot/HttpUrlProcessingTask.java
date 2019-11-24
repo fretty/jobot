@@ -52,6 +52,10 @@ implements Runnable {
 			e.printStackTrace(System.err);
 		}
 		conn.setRequestProperty("User-Agent", "jobot");
+		//Alfred
+		conn.setConnectTimeout(5*1000);
+		conn.setReadTimeout(15*1000);
+ 		conn.setRequestProperty("Connection", "keep-alive");
 	}
 
 	void handleResponse(final HttpURLConnection conn) {
